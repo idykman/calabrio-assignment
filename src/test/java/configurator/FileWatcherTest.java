@@ -3,14 +3,14 @@ package configurator;
 import java.io.File;
 import org.testng.Assert;
 
-public class FileWatcherTest {
+public class FileWatcherTest implements FileChangeSubscriber {
 
   private FileWatcher watcher;
-  private static boolean changeDetected = false;
+  private boolean changeDetected = false;
 
   @org.testng.annotations.BeforeClass
   public void setUp() {
-    watcher = new FileWatcher(TestUtils.testFile, new TestSub());
+    watcher = new FileWatcher(TestUtils.testFile, this);
   }
 
   @org.testng.annotations.AfterClass
@@ -25,11 +25,9 @@ public class FileWatcherTest {
     Assert.assertTrue(changeDetected);
   }
 
-  static public class TestSub implements IFileChangeSubscriber {
-
-    public void onFileChange(File file) {
-      System.out.println(file.getName() + " changed");
-      FileWatcherTest.changeDetected = true;
-    }
+  public void onFileChange(File file) {
+    System.out.println(file.getName() + " changed");
+    changeDetected = true;
   }
+
 }

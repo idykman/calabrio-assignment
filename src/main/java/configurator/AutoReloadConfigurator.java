@@ -4,13 +4,18 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class AutoReloadConfigurator implements IConfigurator, IFileChangeSubscriber {
+/**
+ * AutoReloadConfigurator supports reloading properties. It uses AtomicReference - lock-free
+ * thread-safe mechanism of "swapping" configurations on update.
+ */
 
-  private AtomicReference<IConfigurator> currentConfiguration = new AtomicReference<IConfigurator>();
+public class AutoReloadConfigurator implements Configurator, FileChangeSubscriber {
+
+  private AtomicReference<Configurator> currentConfiguration = new AtomicReference<Configurator>();
 
   public AutoReloadConfigurator(String propFilePath) throws Exception {
     FileWatcher watcher = new FileWatcher(propFilePath, this);
-    currentConfiguration.set(new Configurator(propFilePath));
+    currentConfiguration.set(new SimpleConfigurator(propFilePath));
     watcher.start();
   }
 
@@ -20,7 +25,7 @@ public class AutoReloadConfigurator implements IConfigurator, IFileChangeSubscri
 
   public void onFileChange(File file) {
     try {
-      currentConfiguration.set(new Configurator(file.getAbsolutePath()));
+      currentConfiguration.set(new SimpleConfigurator(file.getAbsolutePath()));
     } catch (IOException e) {
       e.printStackTrace();
     }

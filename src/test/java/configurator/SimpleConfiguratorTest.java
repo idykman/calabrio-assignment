@@ -8,7 +8,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class ConfiguratorTest {
+public class SimpleConfiguratorTest {
 
   Map<String, String> testProps = new HashMap<String, String>();
 
@@ -25,7 +25,7 @@ public class ConfiguratorTest {
 
   @Test
   public void testGetConfig() throws IOException {
-    Configurator configurator = new Configurator(TestUtils.testFile);
+    SimpleConfigurator configurator = new SimpleConfigurator(TestUtils.testFile);
     Assert.assertEquals(configurator.getConfig("key1"), "value1");
     Assert.assertEquals(configurator.getConfig("key2"), "value2");
     Assert.assertEquals(configurator.getConfig("key3"), null);

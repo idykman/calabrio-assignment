@@ -31,8 +31,10 @@ public class AutoReloadConfiguratorTest {
   public void testGetConfig() throws Exception {
     TestUtils.updateTestPropFile(testProps1);
     AutoReloadConfigurator configurator = new AutoReloadConfigurator(TestUtils.testFile);
+
     Assert.assertEquals(configurator.getConfig("key1"), "value1");
     Assert.assertEquals(configurator.getConfig("key2"), "value2");
+
     TestUtils.updateTestPropFile(testProps2);
     Thread.sleep(1000);
     Assert.assertEquals(configurator.getConfig("key1"), "new_value1");

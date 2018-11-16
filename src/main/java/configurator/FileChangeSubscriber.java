@@ -2,7 +2,7 @@ package configurator;
 
 import java.io.File;
 
-public interface IFileChangeSubscriber {
+public interface FileChangeSubscriber {
 
   void onFileChange(File file);
 
