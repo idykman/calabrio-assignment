@@ -1,0 +1,43 @@
+Problem:  
+
+We work for an imaginary company called Legacy Systems Inc.
+
+The code for our product is a customer facing web application written in Java 1.5 and deployed in a single Tomcat 5 server.
+
+The code writers pretty much every aspect of the code configurable and so we have a giant config.properties file with about 100000 entries.
+
+The web application code is very mature and rarely ever changes. All we ever do is make changes to config.properties and upload it to the server. But whenever we do, we have to restart the Tomcat server. The code then reloads the configuration into memory at application startup. However tomcat restart takes about 5 minutes, of which configuration reload takes about 2 seconds. We face downtime for 5 minutes when ideally it should just be 2 seconds.
+
+
+
+Our current Configuration class is initiated at web application startup (as described above) and acts as central singleton class for configuration i.e. all other classes use it to read configuration. It has a single method.
+
+public class Configurator {
+
+Map<String, String> configMap = new HashMap<>();
+
+public Configurator {
+
+  //loads the property file and reads it into configMap
+
+}
+
+public String getConfig(String configName) {
+
+  return configMap.get(configName);
+
+}
+
+}
+
+We want to write a AutoReloadConfigurator class which notices the configuration file change, and reloads the configuration into memory.
+
+This class will replace our old configuration class, but will keep acting as central singleton class for configuration and will have the same method signature.
+
+
+
+The getConfig method gets called a lot. Typical web application load is 10 requests per sec, and each request calls getConfig about 5 times, so this method gets called about 50 times/sec. Tomcat handles each request in a separate thread.
+
+
+
+Your code must compile. Please include instructions to run the program. Please explain your approach either with code comments or a separate doc.
