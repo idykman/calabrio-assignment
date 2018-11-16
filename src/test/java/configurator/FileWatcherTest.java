@@ -1,18 +1,16 @@
 package configurator;
 
 import java.io.File;
-import org.apache.commons.io.FileUtils;
 import org.testng.Assert;
 
 public class FileWatcherTest {
 
-  private static final String testFile = "config.properties";
   private FileWatcher watcher;
   private static boolean changeDetected = false;
 
   @org.testng.annotations.BeforeClass
   public void setUp() {
-    watcher = new FileWatcher(testFile, new TestSub());
+    watcher = new FileWatcher(TestUtils.testFile, new TestSub());
   }
 
   @org.testng.annotations.AfterClass
@@ -22,7 +20,7 @@ public class FileWatcherTest {
   @org.testng.annotations.Test
   public void testStart() throws Exception {
     watcher.start();
-    FileUtils.touch(new File(testFile));
+    TestUtils.touchTestPropFile();
     Thread.sleep(1000);
     Assert.assertTrue(changeDetected);
   }

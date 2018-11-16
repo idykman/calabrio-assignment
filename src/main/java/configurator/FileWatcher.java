@@ -9,6 +9,11 @@ import org.apache.commons.io.monitor.FileAlterationListenerAdaptor;
 import org.apache.commons.io.monitor.FileAlterationMonitor;
 import org.apache.commons.io.monitor.FileAlterationObserver;
 
+/**
+ * Notifies subscriber about file changes.
+ * Uses Apache commons.io library.
+ * Java WatchService API would be a better choice, but not available for Java 5
+ */
 public class FileWatcher {
 
   private static final long POLL_INTERVAL_MS = 1000L;
