@@ -1,5 +1,6 @@
 package configurator;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,20 +16,20 @@ public class SimpleConfigurator implements Configurator {
   private final Properties properties;
 
 
-  public SimpleConfigurator(String propFilePath) throws IOException {
-    properties = readPropFile(propFilePath);
+  public SimpleConfigurator(File file) throws IOException {
+    properties = readPropFile(file);
   }
 
   public String getConfig(String configName) {
     return properties.getProperty(configName);
   }
 
-  private static Properties readPropFile(String propFilePath) throws IOException {
+  private static Properties readPropFile(File file) throws IOException {
     InputStream is = null;
     Properties properties = new Properties();
     try {
-      is = new FileInputStream(propFilePath);
-      properties.load(new FileInputStream(propFilePath));
+      is = new FileInputStream(file);
+      properties.load(is);
     } finally {
       if (null != is) {
         is.close();

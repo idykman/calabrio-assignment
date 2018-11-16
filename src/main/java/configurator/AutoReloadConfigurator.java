@@ -13,9 +13,9 @@ public class AutoReloadConfigurator implements Configurator, FileChangeSubscribe
 
   private AtomicReference<Configurator> currentConfiguration = new AtomicReference<Configurator>();
 
-  public AutoReloadConfigurator(String propFilePath) throws Exception {
-    FileWatcher watcher = new FileWatcher(propFilePath, this);
-    currentConfiguration.set(new SimpleConfigurator(propFilePath));
+  public AutoReloadConfigurator(File file) throws Exception {
+    FileWatcher watcher = new FileWatcher(file, this);
+    currentConfiguration.set(new SimpleConfigurator(file));
     watcher.start();
   }
 
@@ -25,7 +25,7 @@ public class AutoReloadConfigurator implements Configurator, FileChangeSubscribe
 
   public void onFileChange(File file) {
     try {
-      currentConfiguration.set(new SimpleConfigurator(file.getAbsolutePath()));
+      currentConfiguration.set(new SimpleConfigurator(file));
     } catch (IOException e) {
       e.printStackTrace();
     }

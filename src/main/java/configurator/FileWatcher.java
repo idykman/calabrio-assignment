@@ -17,17 +17,16 @@ public class FileWatcher {
 
   private static final long POLL_INTERVAL_MS = 1000L;
 
-  private final String filePath;
+  private final File file;
   private final FileChangeSubscriber subscriber;
   private final FileAlterationMonitor monitor = new FileAlterationMonitor(POLL_INTERVAL_MS);
 
-  public FileWatcher(String filePath, FileChangeSubscriber subscriber) {
-    this.filePath = filePath;
+  public FileWatcher(File file, FileChangeSubscriber subscriber) {
+    this.file = file;
     this.subscriber = subscriber;
   }
 
   public void start() throws Exception {
-    File file = new File(filePath);
     IOFileFilter filter = FileFilterUtils.nameFileFilter(file.getName());
     FileAlterationObserver observer = new FileAlterationObserver(
         file.getAbsoluteFile().getParentFile(), filter);

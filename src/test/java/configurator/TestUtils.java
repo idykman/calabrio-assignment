@@ -10,7 +10,7 @@ import org.apache.commons.io.FileUtils;
 
 public class TestUtils {
 
-  public static final String testFile = "config.properties";
+  public static final File testFile = new File("config.properties");
 
 
   public static void updateTestPropFile(Map<String, String> propMap) throws IOException {
@@ -23,7 +23,7 @@ public class TestUtils {
   }
 
   public static void touchTestPropFile() throws IOException {
-    FileUtils.touch(new File(testFile));
+    FileUtils.touch(testFile);
   }
 }
 

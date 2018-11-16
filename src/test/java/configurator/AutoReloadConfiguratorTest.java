@@ -1,6 +1,5 @@
 package configurator;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import org.testng.Assert;
@@ -15,7 +14,7 @@ public class AutoReloadConfiguratorTest {
 
 
   @BeforeMethod
-  public void setUp() throws IOException {
+  public void setUp() {
     testProps1.put("key1", "value1");
     testProps1.put("key2", "value2");
 
