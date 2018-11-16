@@ -1,4 +1,5 @@
 1. Assignment analysis
+
 The task is to develop the solution to automatically reload prop set on file change.
 Prop file monitoring is done by FileWatcher.java class which utilizes apache.commons.io.monitor
 library capabilities.
@@ -8,16 +9,18 @@ The main challenge is to have thread safe solution without performance penalties
 This is done by implementing "swap" pattern - while new property set is not ready, existing set is used for serving getConfig requests.
 Only when new set is complete it replaces the old one.
 Set of properties is represented by SimpleConfigurator class, which is functionally equal to "old", non-reloadable solution.
-So, old code will be re-used.
-Configurator interface describes client-facing functionality making replacement of "old" configurator transparent for the rest of the system.
+So, in reality old code can be re-used.
 
-Finally, the AutoReloadConfigurator is a new class representing complete solution
+Configurator interface defines client-facing functionality, making replacement of "old" configurator transparent for the rest of the system.
+
+Finally, the AutoReloadConfigurator is a new class representing complete solution. It's
 aggregating FileWatcher and swappable SimpleConfigurator functionality. SimpleConfigurator is wrapped by
 AtomicReference - lock-free, thread-safe mechanism for swapping.
 
 Each class is covered by TestNG unit test. Tests verifies just the basic functionality, not corner cases or error conditions.
 
 2. Assumptions
+
 2.1 Singleton pattern and life cycle of AutoReloadConfigurator is done by Tomcat and not part of this solution.
 2.2 Individual properties are independent from client perspective . Scenario: client calls getConfig 2 times to get prop1 and prop2.
 in case when update happened in between those calls, prop1 and prop2 values will be inconsistent to each other.
@@ -25,7 +28,9 @@ In order to get consistent set of properties new "batch" method should be implem
 Map<String,String> getConfig (Set<String> keys)
 2.3 Error handling is done by clent, configurator just throws exceptions
 
-3. Assignment is done as Maven project, in order to compile and execute unit tests run following command:
+3. Execution instructions
+
+Assignment is done as a Maven project, in order to compile and execute unit tests run following command:
 "mvn install" from project root folder.
 
 
