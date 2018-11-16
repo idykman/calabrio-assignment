@@ -15,6 +15,8 @@ Finally, the AutoReloadConfigurator is a new class representing complete solutio
 aggregating FileWatcher and swappable SimpleConfigurator functionality. SimpleConfigurator is wrapped by
 AtomicReference - lock-free, thread-safe mechanism for swapping.
 
+Each class is covered by TestNG unit test. Tests verifies just the basic functionality, not corner cases or error conditions.
+
 2. Assumptions
 2.1 Singleton pattern and life cycle of AutoReloadConfigurator is done by Tomcat and not part of this solution.
 2.2 Individual properties are independent from client perspective . Scenario: client calls getConfig 2 times to get prop1 and prop2.
