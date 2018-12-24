@@ -6,7 +6,7 @@ import org.testng.Assert;
 public class FileWatcherTest implements FileChangeSubscriber {
 
   private FileWatcher watcher;
-  private boolean changeDetected = false;
+  private volatile boolean changeDetected = false;
 
   @org.testng.annotations.BeforeClass
   public void setUp() {
@@ -15,13 +15,16 @@ public class FileWatcherTest implements FileChangeSubscriber {
 
   @org.testng.annotations.AfterClass
   public void tearDown() {
+
   }
 
   @org.testng.annotations.Test
   public void testStart() throws Exception {
     watcher.start();
     TestUtils.touchTestPropFile();
+    System.out.println("changed before:" + changeDetected);
     Thread.sleep(1000);
+    System.out.println("changed:" + changeDetected);
     Assert.assertTrue(changeDetected);
   }
 
