@@ -1,36 +1,47 @@
 package configurator;
 
-import java.io.File;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
+
+import java.io.File;
 
 public class FileWatcherTest implements FileChangeSubscriber {
 
-  private FileWatcher watcher;
-  private volatile boolean changeDetected = false;
+    private FileWatcher watcher;
+    private volatile boolean changeDetected = false;
+    private final Object lock = new Object();
 
-  @org.testng.annotations.BeforeClass
-  public void setUp() {
-    watcher = new FileWatcher(TestUtils.testFile, this);
-  }
+    @BeforeMethod
+    public void setUp() {
+        TestUtils.deleteTestPropFile();
+        watcher = new FileWatcher(TestUtils.testFile, this);
+    }
 
-  @org.testng.annotations.AfterClass
-  public void tearDown() {
+    @AfterMethod
+    public void tearDown() {
+        TestUtils.deleteTestPropFile();
+    }
 
-  }
+    @Test(timeOut = 1000)
+    public void testStart() throws Exception {
+        watcher.start();
+        TestUtils.touchTestPropFile();
+        synchronized (lock) {
+            while (!changeDetected) {
+                lock.wait();
+            }
+        }
+        Assert.assertTrue(changeDetected);
+    }
 
-  @org.testng.annotations.Test
-  public void testStart() throws Exception {
-    watcher.start();
-    TestUtils.touchTestPropFile();
-    System.out.println("changed before:" + changeDetected);
-    Thread.sleep(1000);
-    System.out.println("changed:" + changeDetected);
-    Assert.assertTrue(changeDetected);
-  }
-
-  public void onFileChange(File file) {
-    System.out.println(file.getName() + " changed");
-    changeDetected = true;
-  }
+    public void onFileChange(File file) {
+        System.out.println(file.getName() + " changed");
+        synchronized (lock) {
+            changeDetected = true;
+            lock.notifyAll();
+        }
+    }
 
 }
