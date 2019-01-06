@@ -11,23 +11,28 @@ import java.util.Properties;
 
 public class TestUtils {
 
-    public static final File testFile = new File("config.properties");
+    public final File testFile;
 
+    public TestUtils(String testFileName) {
+        this.testFile = new File(testFileName + "_config.properties");;
+    }
 
-    public static void updateTestPropFile(Map<String, String> propMap) throws IOException {
+    public void updateTestPropFile(Map<String, String> propMap) throws IOException {
         Properties prop = new Properties();
         OutputStream output = new FileOutputStream(testFile);
         for (Map.Entry<String, String> entry : propMap.entrySet()) {
             prop.setProperty(entry.getKey(), entry.getValue());
         }
         prop.store(output, "Test");
+        output.flush();
+        output.close();
     }
 
-    public static void touchTestPropFile() throws IOException {
+    public void touchTestPropFile() throws IOException {
         FileUtils.touch(testFile);
     }
 
-    public static void deleteTestPropFile() {
+    public void deleteTestPropFile() {
         FileUtils.deleteQuietly(testFile);
     }
 }
