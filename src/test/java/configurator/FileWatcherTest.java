@@ -7,7 +7,6 @@ import org.testng.annotations.Test;
 
 import java.io.File;
 
-
 public class FileWatcherTest implements FileChangeSubscriber {
 
     private FileWatcher watcher;
@@ -22,7 +21,8 @@ public class FileWatcherTest implements FileChangeSubscriber {
     }
 
     @AfterMethod
-    public void tearDown() {
+    public void tearDown() throws Exception {
+        watcher.stop();
         testUtils.deleteTestPropFile();
     }
 

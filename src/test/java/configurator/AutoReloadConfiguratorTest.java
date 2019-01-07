@@ -51,6 +51,7 @@ public class AutoReloadConfiguratorTest {
     }
     Assert.assertEquals(configurator.getConfig("key1"), "new_value1");
     Assert.assertEquals(configurator.getConfig("key2"), "new_value2");
+
     System.out.println("test config finished");
 
   }

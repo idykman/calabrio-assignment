@@ -46,5 +46,9 @@ public class FileWatcher {
     monitor.start();
   }
 
+  public void stop () throws Exception {
+    monitor.stop();
+  }
+
 
 }
